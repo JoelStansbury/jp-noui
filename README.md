@@ -3,6 +3,8 @@
 [![Github Actions Status](https://github.com/JoelStansbury/jp_noui/workflows/Build/badge.svg)](https://github.com/JoelStansbury/jp_noui/actions/workflows/build.yml)
 Hides all jupyter UI elements leaving only cell outputs (notebooks are auto executed).
 
+https://user-images.githubusercontent.com/48299585/219976625-df126ab1-3707-4dc2-8294-d612d1b9a68a.mp4
+
 ## Requirements
 
 - JupyterLab >= 3.0
