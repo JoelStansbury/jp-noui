@@ -7,9 +7,9 @@
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "https://github.com/JoelStansbury/jp-noui",
+  "homepage": "https://github.com/JoelStansbury/jp_noui",
   "bugs": {
-    "url": "https://github.com/JoelStansbury/jp-noui/issues"
+    "url": "https://github.com/JoelStansbury/jp_noui/issues"
   },
   "license": "BSD-3-Clause",
   "author": {
@@ -25,7 +25,7 @@
   "style": "style/index.css",
   "repository": {
     "type": "git",
-    "url": "https://github.com/JoelStansbury/jp-noui.git"
+    "url": "https://github.com/JoelStansbury/jp_noui.git"
   },
   "scripts": {
     "build": "jlpm build:lib && jlpm build:labextension:dev",

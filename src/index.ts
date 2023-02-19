@@ -12,7 +12,6 @@ import {
 } from '@lumino/disposable';
 
 import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
-// import { IThemeManager } from '@jupyterlab/apputils';
 
 
 const splash_element = document.createElement('div');
@@ -20,7 +19,7 @@ splash_element.classList.add('jp-noui-splash-screen');
 splash_element.innerHTML = "Loading...";
 
 const exit_btn = document.createElement('button')
-exit_btn.classList.add("jp-noui-exit-button");
+exit_btn.classList.add("jp-noui-exit-btn");
 exit_btn.innerHTML = "Exit Appmode"
 exit_btn.addEventListener('click', (e) => {
   console.log("clicked")
@@ -74,8 +73,7 @@ style.innerHTML = `
   width: 100% !important;
 }
 
-// jp-noui UI Elements
-.jp-noui-exit-button {
+.jp-noui-exit-btn {
   z-index: 999;
   position: absolute;
   bottom: 0px;
@@ -109,13 +107,13 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
 
     document.body.appendChild(style);  // Hide jlab garbage
     document.body.appendChild(splash_element);  // Show splash screen
+    document.body.appendChild(exit_btn);  // Show button to exit
 
     // Add listener to NotebookTracker
     tracker.currentChanged.connect((_: INotebookTracker, nbp: NotebookPanel | null) => {
       if (nbp) {
         nbp.sessionContext.ready.then(() => {
           app.commands.execute("notebook:run-all-cells");
-          document.body.appendChild(exit_btn);
           document.body.removeChild(splash_element);
         });
       }

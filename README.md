@@ -1,7 +1,7 @@
 # jp_noui
 
-[![Github Actions Status](https://github.com/JoelStansbury/jp-noui/workflows/Build/badge.svg)](https://github.com/JoelStansbury/jp-noui/actions/workflows/build.yml)
-Hides all jupyter UI elements (leaving only cell outputs)
+[![Github Actions Status](https://github.com/JoelStansbury/jp_noui/workflows/Build/badge.svg)](https://github.com/JoelStansbury/jp_noui/actions/workflows/build.yml)
+Hides all jupyter UI elements leaving only cell outputs (notebooks are auto executed).
 
 ## Requirements
 
