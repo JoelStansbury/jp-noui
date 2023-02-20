@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling>=1.4.0", "jupyterlab>=3.4.7,<4.0.0", "hatch-nodejs-version"]
+requires = ["hatchling>=1.4.0", "jupyterlab>=3.4.7,<4.0.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -27,10 +27,8 @@ dependencies = [
 dynamic = ["version", "description", "authors", "urls", "keywords"]
 
 [tool.hatch.version]
-source = "nodejs"
-
-[tool.hatch.metadata.hooks.nodejs]
-fields = ["description", "authors", "urls"]
+path = "package.json"
+pattern = '"version"\s*:\s*"(?P<version>\d+\.\d+\.\d+)"'
 
 [tool.hatch.build.targets.sdist]
 artifacts = ["jp_noui/labextension"]
