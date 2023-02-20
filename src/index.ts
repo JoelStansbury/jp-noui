@@ -146,11 +146,10 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
     tracker: INotebookTracker,
   ) => {
 
-    document.body.appendChild(style);  // Hide jlab garbage
+    document.body.appendChild(style);  // Hide jlab ui
     document.body.appendChild(splash_element);  // Show splash screen
     splash_is_visible = true;
     document.body.appendChild(exit_btn);  // Show button to exit
-
 
     // Add listener to NotebookTracker
     tracker.currentChanged.connect((_: INotebookTracker, nbp: NotebookPanel | null) => {
