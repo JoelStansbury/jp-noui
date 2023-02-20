@@ -1,6 +1,6 @@
 {
   "name": "jp-noui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Hides all jupyter UI elements (leaving only cell outputs)",
   "keywords": [
     "jupyter",
