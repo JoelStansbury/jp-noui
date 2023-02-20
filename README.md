@@ -5,6 +5,12 @@ Hides all jupyter UI elements leaving only cell outputs (notebooks are auto exec
 
 https://user-images.githubusercontent.com/48299585/219976625-df126ab1-3707-4dc2-8294-d612d1b9a68a.mp4
 
+To hide the `Exit Appmode` button you can add the following cell to your notebook
+```python
+import ipywidgets as w
+w.HTML("<style>.jp-noui-exit-btn {display:none}</style>")
+```
+
 ## Requirements
 
 - JupyterLab >= 3.0
