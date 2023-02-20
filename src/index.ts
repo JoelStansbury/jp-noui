@@ -71,6 +71,13 @@ style.innerHTML = `
   height: 100% !important;
   width: 100% !important;
 }
+#jp-main-split-panel {
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
 .jp-NotebookPanel {
   top: 0 !important;
   left: 0 !important;
@@ -149,6 +156,7 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
     document.body.appendChild(style);  // Hide jlab ui
     document.body.appendChild(splash_element);  // Show splash screen
     splash_is_visible = true;
+    autorun = true;
     document.body.appendChild(exit_btn);  // Show button to exit
 
     // Add listener to NotebookTracker
