@@ -1359,9 +1359,9 @@
     "@lumino/disposable" "^1.10.0"
     "@lumino/signaling" "^1.10.0"
 
-"@jupyterlab/builder@^3.1.0":
+"@jupyterlab/builder@^3.4.0":
   version "3.6.1"
-  resolved "https://registry.npmjs.org/@jupyterlab/builder/-/builder-3.6.1.tgz"
+  resolved "https://registry.yarnpkg.com/@jupyterlab/builder/-/builder-3.6.1.tgz#a04bf0312e8679d1f452c27fee2554ba4a6af3f5"
   integrity sha512-LvHQe6InEXJisEcvAdvSFbEEl8OhTjxBSNz7MrjRB+Ur+Qs898dg8QhDH9Ad5mgK3uh4nEN1BDq9W7C/NomqoA==
   dependencies:
     "@lumino/algorithm" "^1.9.0"
