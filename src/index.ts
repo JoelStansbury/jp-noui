@@ -1,130 +1,69 @@
-import {
-  JupyterFrontEnd,
-  JupyterFrontEndPlugin,
-} from '@jupyterlab/application';
+import { JupyterFrontEnd, JupyterFrontEndPlugin } from '@jupyterlab/application';
 
-import {
-  ISplashScreen, 
-} from '@jupyterlab/apputils';
+import { ISplashScreen } from '@jupyterlab/apputils';
 
-import { 
-  DisposableDelegate 
-} from '@lumino/disposable';
+import { DisposableDelegate } from '@lumino/disposable';
 
-import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
+import { PromiseDelegate } from '@lumino/coreutils';
 
+import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
 
-const splash_element = document.createElement('div');
-splash_element.classList.add('jp-noui-splash-screen');
-splash_element.innerHTML = "Loading...";
+import {IFileBrowserCommands} from '@jupyterlab/filebrowser'
 
-const exit_btn = document.createElement('button')
-exit_btn.classList.add("jp-noui-exit-btn");
-exit_btn.innerHTML = "Exit Appmode"
-exit_btn.addEventListener('click', (e) => {
-  console.log("clicked")
-  document.body.removeChild(style);
+import { PageConfig } from '@jupyterlab/coreutils';
+
+const body = document.body;
+body.dataset.nouiState = "loading";
+
+const exit_btn = document.createElement('button');
+exit_btn.classList.add('jp-noui-exit-btn');
+exit_btn.addEventListener('click', e => {
+  console.log('clicked');
   document.body.removeChild(exit_btn);
+  document.getElementById("jp-noui-style")?.remove();
 });
 
-const style = document.createElement('style')
-style.innerHTML = `
-#jp-top-panel {display:none;}
-#jp-bottom-panel {display:none;}
-#jp-left-stack {display:none;}
-.jp-SideBar.lm-TabBar {display: none;}
-.jp-Notebook.jp-mod-scrollPastEnd::after {display: none;}
-.jp-Cell-inputWrapper {display: none;}
-.jp-OutputPrompt {display: none;}
-.jp-Cell {padding:0}
-.jp-cell-menu {display: none;}
-.lm-TabBar {display: none;}
-.jp-Toolbar {display: none;}
-.jp-Collapser {display: none;}
-.jp-Notebook {
-  padding: 0;
-  top: 0 !important;
-  left:0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-#jp-main-vsplit-panel {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-#jp-main-content-panel {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-#jp-main-dock-panel {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-.jp-NotebookPanel {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-
-.jp-noui-exit-btn {
-  z-index: 999;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  background: white;
-  border: none;
-  font-family: system-ui;
-}
-.jp-noui-splash-screen {
-  z-index: 1000;
-  position: absolute;
-  background: white;
-  height: 100%;
-  width: 100%;
-  font-family: system-ui;
-}
-`
 
 /**
  * A splash screen for jp-noui
  */
 const splash: JupyterFrontEndPlugin<ISplashScreen> = {
-  id: '@jp-noui/jp-noui:plugin',
+  id: 'jp-noui:plugin',
   autoStart: true,
-  requires: [INotebookTracker],
+  requires: [IFileBrowserCommands, INotebookTracker],
   provides: ISplashScreen,
-  activate: (
-    app: JupyterFrontEnd,
-    tracker: INotebookTracker,
-  ) => {
+  activate: (app: JupyterFrontEnd, fb:any, tracker: INotebookTracker) => {
+    
+    body.dataset.nouiState = "activating"; 
+    const nbPath = PageConfig.getOption("noui_notebook");
+    console.log(`Will load ${nbPath}`);
+    
+    const ready = new PromiseDelegate<void>();
+    document.body.appendChild(exit_btn); // Show button to exit
 
-    document.body.appendChild(style);  // Hide jlab garbage
-    document.body.appendChild(splash_element);  // Show splash screen
-    document.body.appendChild(exit_btn);  // Show button to exit
+    void app.commands.execute('filebrowser:open-path', { path: nbPath });
 
-    // Add listener to NotebookTracker
     tracker.currentChanged.connect((_: INotebookTracker, nbp: NotebookPanel | null) => {
       if (nbp) {
-        nbp.sessionContext.ready.then(() => {
-          app.commands.execute("notebook:run-all-cells");
-          document.body.removeChild(splash_element);
+        body.dataset.nouiState = "open";
+        nbp.sessionContext.ready.then(async () => {
+          body.dataset.nouiState = "running";
+          await app.commands.execute('notebook:run-all-cells');
+          ready.resolve(void 0);
         });
       }
     });
 
     return {
       show: () => {
-        return new DisposableDelegate(async () => {});
+        return new DisposableDelegate(async () => {
+          await ready.promise;
+          // document.getElementById("jp-noui-splash")?.remove();
+          body.dataset.nouiState = "ready";
+        });
       }
     };
-  },
+  }
 };
 
 export default splash;
