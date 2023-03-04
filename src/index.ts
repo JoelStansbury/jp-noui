@@ -7,6 +7,7 @@ import { DisposableDelegate } from '@lumino/disposable';
 import { PromiseDelegate } from '@lumino/coreutils';
 
 import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
+// import { INotebookTracker } from '@jupyterlab/notebook';
 
 import { IFileBrowserCommands } from '@jupyterlab/filebrowser';
 
@@ -16,12 +17,7 @@ const body = document.body;
 body.dataset.nouiState = 'loading';
 
 const exit_btn = document.createElement('button');
-exit_btn.classList.add('jp-noui-exit-btn');
-exit_btn.addEventListener('click', e => {
-  console.log('clicked');
-  document.body.removeChild(exit_btn);
-  document.getElementById('jp-noui-style')?.remove();
-});
+exit_btn.id = 'jp-noui-exit-btn';
 
 /**
  * A splash screen for jp-noui
@@ -34,31 +30,71 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
   activate: (app: JupyterFrontEnd, fb: any, tracker: INotebookTracker) => {
     console.log('JupyterLab extension jp-noui is activated!');
     body.dataset.nouiState = 'activating';
+
+    
     const nbPath = PageConfig.getOption('noui_notebook');
-    console.log(`Will load ${nbPath}`);
-
     const ready = new PromiseDelegate<void>();
-    document.body.appendChild(exit_btn); // Show button to exit
+    const nbCache = new Set();
 
-    void app.commands.execute('filebrowser:open-path', { path: nbPath });
+    function autoRunAll(_: INotebookTracker, nbp: NotebookPanel | null) {
+      if (nbp && !nbCache.has(nbp.title.label)) {
+        nbCache.add(nbp.title.label)
 
-    tracker.currentChanged.connect((_: INotebookTracker, nbp: NotebookPanel | null) => {
-      if (nbp) {
+        console.log(`noui: Running Notebook ${nbp.title.label}"`)
         body.dataset.nouiState = 'open';
         nbp.sessionContext.ready.then(async () => {
           body.dataset.nouiState = 'running';
           await app.commands.execute('notebook:run-all-cells');
+          body.dataset.nouiState = 'ready';
           ready.resolve(void 0);
         });
       }
+    }
+
+    function runOne(_: INotebookTracker, nbp: NotebookPanel | null) {
+      if (nbp && nbPath.endsWith(nbp.title.label)) {
+        nbCache.add(nbp.title.label)
+        tracker.currentChanged.disconnect(runOne);
+        console.log(`noui: Running Notebook ${nbp.title.label}"`)
+        body.dataset.nouiState = 'open';
+        nbp.sessionContext.ready.then(async () => {
+          body.dataset.nouiState = 'running';
+          await app.commands.execute('notebook:run-all-cells');
+          body.dataset.nouiState = 'ready';
+          ready.resolve(void 0);
+        });
+        tracker.currentChanged.connect(autoRunAll)
+      }
+    }
+
+    exit_btn.addEventListener('click', e => {
+      console.log('noui: Exited noui mode... Deactivating autorun')
+      tracker.currentChanged.disconnect(autoRunAll);
+      document.body.removeChild(exit_btn);
+      document.getElementById('jp-noui-style')?.remove();
+      
+      // Force Layout Recalculation
+      // document.body.style.scale = '1';
+      window.dispatchEvent(new Event('resize'));
     });
+    
+
+    if (nbPath.length>0) {
+      void app.commands.execute('filebrowser:open-path', { path: nbPath });
+      tracker.currentChanged.connect(runOne)
+      document.body.appendChild(exit_btn); // Show button to exit
+
+    } else {
+      console.log('noui: No Notebook provided. Exiting to JupyterLab')
+      body.dataset.nouiState = 'ready';
+      ready.resolve(void 0);
+    }
+
 
     return {
       show: () => {
         return new DisposableDelegate(async () => {
           await ready.promise;
-          // document.getElementById("jp-noui-splash")?.remove();
-          body.dataset.nouiState = 'ready';
         });
       }
     };

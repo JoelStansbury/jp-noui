@@ -3,18 +3,11 @@ from pathlib import Path
 from jupyterlab.labapp import LabApp
 from jupyterlab_server.handlers import LabHandler
 from tornado import web
-import traitlets as T
 
 # also a ServerApp to use
 STATIC = Path(__file__).parent / "static"
 DEFAULT_STYLE = STATIC / "style.css"
 DEFAULT_LOADER = STATIC / "splash.html"
-
-
-class NoUIApp(LabApp):
-    notebook = T.Unicode(help="A single notebook to open and run at startup.").tag(config=True)
-    # preload_html = T.Unicode(help="The html file to patch into the lab page.").tag(config=True)
-    
 
 class NoUIHandler(LabHandler):
     @web.authenticated
@@ -53,5 +46,5 @@ class NoUIHandler(LabHandler):
         self.write(tpl)
 
 LabHandler.get = NoUIHandler.get
-main = NoUIApp.launch_instance
+main = LabApp.launch_instance
 

@@ -1,65 +1,81 @@
 /* 
 This file is the css that is applied to JupyterLab.
+This file changes the font color of the exit button to red.
+Everything else is the same as the default.
  */
-#jp-top-panel {
-  display: none;
-}
-#jp-bottom-panel {
-  display: none;
-}
-#jp-left-stack {
-  display: none;
-}
-#jp-menu-panel {
-  display: none;
-}
-
+ 
 .jp-SideBar.lm-TabBar {
   display: none;
 }
+
+#jp-bottom-panel {
+  display: none;
+}
+
 .jp-Notebook.jp-mod-scrollPastEnd::after {
   display: none;
 }
-.jp-Cell-inputWrapper {
+
+.jp-InputArea-prompt {
   display: none;
 }
+
+.jp-Editor {
+  display: none;
+}
+
 .jp-OutputPrompt {
   display: none;
 }
+
 .jp-Cell {
   padding: 0;
 }
+
 .jp-cell-menu {
   display: none;
 }
+
 .lm-TabBar {
   display: none;
 }
+
 .jp-Toolbar {
   display: none;
 }
+
 .jp-Collapser {
   display: none;
 }
+
 .jp-Notebook {
   padding: 0;
+  z-index: 2;
   top: 0 !important;
   left: 0 !important;
   height: 100% !important;
   width: 100% !important;
 }
+
+.jp-MarkdownOutput {
+  display: block;
+  border: none;
+}
+
 #jp-main-vsplit-panel {
   top: 0 !important;
   left: 0 !important;
   height: 100% !important;
   width: 100% !important;
 }
+
 #jp-main-content-panel {
   top: 0 !important;
   left: 0 !important;
   height: 100% !important;
   width: 100% !important;
 }
+
 #jp-main-dock-panel {
   top: 0 !important;
   left: 0 !important;
@@ -81,15 +97,22 @@ body[data-noui-state] .jp-NotebookPanel {
   width: 100% !important;
 }
 
-.jp-noui-exit-btn {
-  z-index: 1;
+#jp-noui-exit-btn {
+  z-index: 2;
   position: absolute;
-  bottom: 0px;
-  left: 0px;
-  background: rgb(255, 0, 0);
+  top: 2px;
+  right: 2px;
+  color: lightgray;
+  background: white;
   border: none;
   font-family: system-ui;
+  border: 1px solid transparent;
 }
-.jp-noui-exit-btn::after {
-  content: 'Exit to Jupyterlab';
+
+#jp-noui-exit-btn::after {
+  content: "Exit to JupyterLab"
+}
+
+#jp-noui-exit-btn:hover {
+  color: red;
 }

@@ -1,6 +1,9 @@
 <!-- 
 This file defines the splash sceen which is visible until the
-the notebook finishes execution
+the notebook finishes execution.
+
+In addition to the default spinner, this file changes the color of the
+spinner based on the state of jp-noui.
  -->
 
 <style>
@@ -51,10 +54,15 @@ the notebook finishes execution
         border-top:8px solid #ff0000;
         border-right:8px solid #ff0000;
     }
-    body[data-noui-state="ready"] .ring::before {
-        border-top:8px solid #ff8539;
-        border-right:8px solid #ff8539;
+    body[data-noui-state="open"] .ring::before {
+        border-top:8px solid #ff00dd;
+        border-right:8px solid #ff00dd;
     }
+    body[data-noui-state="running"] .ring::before {
+        border-top:8px solid #00e1ff;
+        border-right:8px solid #00e1ff;
+    }
+
 
     @keyframes animate {
         0% {transform:rotate(0deg);}
