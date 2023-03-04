@@ -32,6 +32,7 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
   requires: [IFileBrowserCommands, INotebookTracker],
   provides: ISplashScreen,
   activate: (app: JupyterFrontEnd, fb: any, tracker: INotebookTracker) => {
+    console.log('JupyterLab extension jp-noui is activated!');
     body.dataset.nouiState = 'activating';
     const nbPath = PageConfig.getOption('noui_notebook');
     console.log(`Will load ${nbPath}`);
