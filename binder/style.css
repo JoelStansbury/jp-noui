@@ -1,7 +1,7 @@
 #jp-top-panel {display:none;}
 #jp-bottom-panel {display:none;}
 #jp-left-stack {display:none;}
-
+#jp-menu-panel {display:none;}
 .jp-SideBar.lm-TabBar {display: none;}
 .jp-Notebook.jp-mod-scrollPastEnd::after {display: none;}
 .jp-Cell-inputWrapper {display: none;}
