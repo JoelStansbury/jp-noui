@@ -1,11 +1,11 @@
 {
-    "ServerApp": {
-        "tornado_settings": {
-            "page_config_data" : {
-                "noui_splash_html": "binder/splash.html",
-                "noui_style_css": "binder/style.css",
-                "noui_notebook": "binder/default.ipynb"
-            }
-        }
+  "ServerApp": {
+    "tornado_settings": {
+      "page_config_data": {
+        "noui_splash_html": "binder/splash.html",
+        "noui_style_css": "binder/style.css",
+        "noui_notebook": "binder/default.ipynb"
+      }
     }
+  }
 }

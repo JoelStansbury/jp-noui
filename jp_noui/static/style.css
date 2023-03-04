@@ -1,50 +1,17 @@
-#jp-top-panel {
-  display: none;
-}
+#jp-top-panel {display:none;}
+#jp-bottom-panel {display:none;}
+#jp-left-stack {display:none;}
+#jp-menu-panel {display:none;}
 
-#jp-bottom-panel {
-  display: none;
-}
-
-#jp-left-stack {
-  display: none;
-}
-
-.jp-SideBar.lm-TabBar {
-  display: none;
-}
-
-.jp-Notebook.jp-mod-scrollPastEnd::after {
-  display: none;
-}
-
-.jp-Cell-inputWrapper {
-  display: none;
-}
-
-.jp-OutputPrompt {
-  display: none;
-}
-
-.jp-Cell {
-  padding: 0
-}
-
-.jp-cell-menu {
-  display: none;
-}
-
-.lm-TabBar {
-  display: none;
-}
-
-.jp-Toolbar {
-  display: none;
-}
-
-.jp-Collapser {
-  display: none;
-}
+.jp-SideBar.lm-TabBar {display: none;}
+.jp-Notebook.jp-mod-scrollPastEnd::after {display: none;}
+.jp-Cell-inputWrapper {display: none;}
+.jp-OutputPrompt {display: none;}
+.jp-Cell {padding:0}
+.jp-cell-menu {display: none;}
+.lm-TabBar {display: none;}
+.jp-Toolbar {display: none;}
+.jp-Collapser {display: none;}
 
 .jp-Notebook {
   padding: 0;
@@ -92,8 +59,8 @@ body[data-noui-state] .jp-NotebookPanel {
 .jp-noui-exit-btn {
   z-index: 1;
   position: absolute;
-  bottom: 0;
-  left: 0;
+  bottom: 1;
+  left: 1;
   background: white;
   border: none;
   font-family: system-ui;

@@ -1,20 +1,50 @@
-#jp-top-panel {display:none;}
-#jp-bottom-panel {display:none;}
-#jp-left-stack {display:none;}
-#jp-menu-panel {display:none;}
-.jp-SideBar.lm-TabBar {display: none;}
-.jp-Notebook.jp-mod-scrollPastEnd::after {display: none;}
-.jp-Cell-inputWrapper {display: none;}
-.jp-OutputPrompt {display: none;}
-.jp-Cell {padding:0}
-.jp-cell-menu {display: none;}
-.lm-TabBar {display: none;}
-.jp-Toolbar {display: none;}
-.jp-Collapser {display: none;}
+/* 
+This file is the css that is applied to JupyterLab.
+ */
+#jp-top-panel {
+  display: none;
+}
+#jp-bottom-panel {
+  display: none;
+}
+#jp-left-stack {
+  display: none;
+}
+#jp-menu-panel {
+  display: none;
+}
+
+.jp-SideBar.lm-TabBar {
+  display: none;
+}
+.jp-Notebook.jp-mod-scrollPastEnd::after {
+  display: none;
+}
+.jp-Cell-inputWrapper {
+  display: none;
+}
+.jp-OutputPrompt {
+  display: none;
+}
+.jp-Cell {
+  padding: 0;
+}
+.jp-cell-menu {
+  display: none;
+}
+.lm-TabBar {
+  display: none;
+}
+.jp-Toolbar {
+  display: none;
+}
+.jp-Collapser {
+  display: none;
+}
 .jp-Notebook {
   padding: 0;
   top: 0 !important;
-  left:0 !important;
+  left: 0 !important;
   height: 100% !important;
   width: 100% !important;
 }
@@ -61,5 +91,5 @@ body[data-noui-state] .jp-NotebookPanel {
   font-family: system-ui;
 }
 .jp-noui-exit-btn::after {
-  content:"Exit"
+  content: 'Exit to Jupyterlab';
 }
