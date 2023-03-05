@@ -3,6 +3,8 @@
 [![Github Actions Status](https://github.com/JoelStansbury/jp_noui/workflows/Build/badge.svg)](https://github.com/JoelStansbury/jp_noui/actions/workflows/build.yml)
 Hides all jupyter UI elements leaving only cell outputs (notebooks are auto executed).
 
+Try it out on [binder](https://mybinder.org/v2/gh/JoelStansbury/jp_noui/binder)
+
 ## Requirements
 
 - JupyterLab >= 3.0
@@ -24,6 +26,11 @@ pip uninstall jp_noui
 ```
 
 ## Configuration
+
+1. Create a `config.json` following the structure found in `binder/jupyter_config.json`
+2. Launch the server with `jupyter-noui --config="path/to/config.json"` (+ any other args you'd like to pass `jupyter lab`... e.g. `--no-browser`)
+3. Tweak `splash.html` until satisfied (no need to restart the server, just refresh the page)
+
 
 see `binder/jupyter_config.json` for an example. Config options are expected to be found in ServerApp.tornado_settings.page_config_data.
 
