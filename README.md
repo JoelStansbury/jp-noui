@@ -5,6 +5,12 @@ Hides all jupyter UI elements leaving only cell outputs (notebooks are auto exec
 
 Try it out on [binder](https://mybinder.org/v2/gh/JoelStansbury/jp_noui/binder)
 
+
+
+https://user-images.githubusercontent.com/48299585/222978092-a3763fcf-2672-454a-b755-b8618d0de531.mp4
+
+
+
 ## Requirements
 
 - JupyterLab >= 3.0
