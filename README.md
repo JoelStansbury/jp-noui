@@ -3,8 +3,6 @@
 [![Github Actions Status](https://github.com/JoelStansbury/jp_noui/workflows/Build/badge.svg)](https://github.com/JoelStansbury/jp_noui/actions/workflows/build.yml)
 Hides all jupyter UI elements leaving only cell outputs (notebooks are auto executed).
 
-https://user-images.githubusercontent.com/48299585/219976625-df126ab1-3707-4dc2-8294-d612d1b9a68a.mp4
-
 ## Requirements
 
 - JupyterLab >= 3.0
@@ -24,6 +22,16 @@ To remove the extension, execute:
 ```bash
 pip uninstall jp_noui
 ```
+
+## Configuration
+
+see `binder/jupyter_config.json` for an example. Config options are expected to be found in ServerApp.tornado_settings.page_config_data.
+
+- `noui_splash_html`: Path to html file to show until the notebook finishes execution.
+- `noui_style_css`: Path to css stylesheet to alter the appearance of JupyterLab.
+- `noui_notebook`: Path to notebook to open and execute on launch.
+
+While none of these options are required, if `noui_notebook` is missing, then every notebook will be auto-executed as soon as it is activated, and you'll need to do something to ensure the correct notebook is loaded, e.g. by adding `tree/path/to/your/notebook.ipynb` to the url used to launch the app.
 
 ## Contributing
 

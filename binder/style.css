@@ -3,7 +3,7 @@ This file is the css that is applied to JupyterLab.
 This file changes the font color of the exit button to red.
 Everything else is the same as the default.
  */
- 
+
 .jp-SideBar.lm-TabBar {
   display: none;
 }
@@ -110,7 +110,7 @@ body[data-noui-state] .jp-NotebookPanel {
 }
 
 #jp-noui-exit-btn::after {
-  content: "Exit to JupyterLab"
+  content: 'Exit to JupyterLab';
 }
 
 #jp-noui-exit-btn:hover {
