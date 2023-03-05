@@ -1,0 +1,14 @@
+channels:
+  - conda-forge
+  - nodefaults
+dependencies:
+  - doit
+  - hatch-jupyter-builder
+  - hatch-nodejs-version
+  - hatchling >=1.4.0
+  - jupyterlab >=3.4.7,<3.6
+  - nodejs >=18,<19
+  - python >=3.11,<3.12
+  # used for demo
+  - ipywidgets
+  - matplotlib-base

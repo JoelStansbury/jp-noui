@@ -1,130 +1,100 @@
-import {
-  JupyterFrontEnd,
-  JupyterFrontEndPlugin,
-} from '@jupyterlab/application';
+import { JupyterFrontEnd, JupyterFrontEndPlugin } from '@jupyterlab/application';
 
-import {
-  ISplashScreen, 
-} from '@jupyterlab/apputils';
+import { ISplashScreen } from '@jupyterlab/apputils';
 
-import { 
-  DisposableDelegate 
-} from '@lumino/disposable';
+import { DisposableDelegate } from '@lumino/disposable';
 
-import { INotebookTracker, NotebookPanel } from '@jupyterlab/notebook';
+import { PromiseDelegate } from '@lumino/coreutils';
 
+import { NotebookPanel, INotebookTracker } from '@jupyterlab/notebook';
+// import { INotebookTracker } from '@jupyterlab/notebook';
 
-const splash_element = document.createElement('div');
-splash_element.classList.add('jp-noui-splash-screen');
-splash_element.innerHTML = "Loading...";
+import { IFileBrowserCommands } from '@jupyterlab/filebrowser';
 
-const exit_btn = document.createElement('button')
-exit_btn.classList.add("jp-noui-exit-btn");
-exit_btn.innerHTML = "Exit Appmode"
-exit_btn.addEventListener('click', (e) => {
-  console.log("clicked")
-  document.body.removeChild(style);
-  document.body.removeChild(exit_btn);
-});
+import { PageConfig } from '@jupyterlab/coreutils';
 
-const style = document.createElement('style')
-style.innerHTML = `
-#jp-top-panel {display:none;}
-#jp-bottom-panel {display:none;}
-#jp-left-stack {display:none;}
-.jp-SideBar.lm-TabBar {display: none;}
-.jp-Notebook.jp-mod-scrollPastEnd::after {display: none;}
-.jp-Cell-inputWrapper {display: none;}
-.jp-OutputPrompt {display: none;}
-.jp-Cell {padding:0}
-.jp-cell-menu {display: none;}
-.lm-TabBar {display: none;}
-.jp-Toolbar {display: none;}
-.jp-Collapser {display: none;}
-.jp-Notebook {
-  padding: 0;
-  top: 0 !important;
-  left:0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-#jp-main-vsplit-panel {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-#jp-main-content-panel {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-#jp-main-dock-panel {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
-.jp-NotebookPanel {
-  top: 0 !important;
-  left: 0 !important;
-  height: 100% !important;
-  width: 100% !important;
-}
+const body = document.body;
+body.dataset.nouiState = 'loading';
 
-.jp-noui-exit-btn {
-  z-index: 999;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  background: white;
-  border: none;
-  font-family: system-ui;
-}
-.jp-noui-splash-screen {
-  z-index: 1000;
-  position: absolute;
-  background: white;
-  height: 100%;
-  width: 100%;
-  font-family: system-ui;
-}
-`
+const exit_btn = document.createElement('button');
+exit_btn.id = 'jp-noui-exit-btn';
 
 /**
  * A splash screen for jp-noui
  */
 const splash: JupyterFrontEndPlugin<ISplashScreen> = {
-  id: '@jp-noui/jp-noui:plugin',
+  id: 'jp-noui:plugin',
   autoStart: true,
-  requires: [INotebookTracker],
+  requires: [IFileBrowserCommands, INotebookTracker],
   provides: ISplashScreen,
-  activate: (
-    app: JupyterFrontEnd,
-    tracker: INotebookTracker,
-  ) => {
+  activate: (app: JupyterFrontEnd, fb: any, tracker: INotebookTracker) => {
+    console.log('JupyterLab extension jp-noui is activated!');
+    body.dataset.nouiState = 'activating';
 
-    document.body.appendChild(style);  // Hide jlab garbage
-    document.body.appendChild(splash_element);  // Show splash screen
-    document.body.appendChild(exit_btn);  // Show button to exit
+    const nbPath = PageConfig.getOption('noui_notebook');
+    const ready = new PromiseDelegate<void>();
+    const nbCache = new Set();
 
-    // Add listener to NotebookTracker
-    tracker.currentChanged.connect((_: INotebookTracker, nbp: NotebookPanel | null) => {
-      if (nbp) {
-        nbp.sessionContext.ready.then(() => {
-          app.commands.execute("notebook:run-all-cells");
-          document.body.removeChild(splash_element);
+    function autoRunAll(_: INotebookTracker, nbp: NotebookPanel | null) {
+      if (nbp && !nbCache.has(nbp.title.label)) {
+        nbCache.add(nbp.title.label);
+
+        console.log(`noui: Running Notebook ${nbp.title.label}"`);
+        body.dataset.nouiState = 'open';
+        nbp.sessionContext.ready.then(async () => {
+          body.dataset.nouiState = 'running';
+          await app.commands.execute('notebook:run-all-cells');
+          body.dataset.nouiState = 'ready';
+          ready.resolve(void 0);
         });
       }
+    }
+
+    function runOne(_: INotebookTracker, nbp: NotebookPanel | null) {
+      if (nbp && nbPath.endsWith(nbp.title.label)) {
+        nbCache.add(nbp.title.label);
+        tracker.currentChanged.disconnect(runOne);
+        console.log(`noui: Running Notebook ${nbp.title.label}"`);
+        body.dataset.nouiState = 'open';
+        nbp.sessionContext.ready.then(async () => {
+          body.dataset.nouiState = 'running';
+          await app.commands.execute('notebook:run-all-cells');
+          body.dataset.nouiState = 'ready';
+          ready.resolve(void 0);
+        });
+        tracker.currentChanged.connect(autoRunAll);
+      }
+    }
+
+    exit_btn.addEventListener('click', e => {
+      console.log('noui: Exited noui mode... Deactivating autorun');
+      tracker.currentChanged.disconnect(autoRunAll);
+      document.body.removeChild(exit_btn);
+      document.getElementById('jp-noui-style')?.remove();
+
+      // Force Layout Recalculation
+      // document.body.style.scale = '1';
+      window.dispatchEvent(new Event('resize'));
     });
+
+    if (nbPath.length > 0) {
+      void app.commands.execute('filebrowser:open-path', { path: nbPath });
+      tracker.currentChanged.connect(runOne);
+      document.body.appendChild(exit_btn); // Show button to exit
+    } else {
+      console.log('noui: No Notebook provided. Exiting to JupyterLab');
+      body.dataset.nouiState = 'ready';
+      ready.resolve(void 0);
+    }
 
     return {
       show: () => {
-        return new DisposableDelegate(async () => {});
+        return new DisposableDelegate(async () => {
+          await ready.promise;
+        });
       }
     };
-  },
+  }
 };
 
 export default splash;

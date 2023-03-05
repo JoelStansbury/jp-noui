@@ -1,0 +1,120 @@
+/* 
+This file is the css that is applied to JupyterLab.
+ */
+ 
+ .jp-SideBar.lm-TabBar {
+  display: none;
+}
+
+#jp-bottom-panel {
+  display: none;
+}
+
+#jp-menu-panel {
+  display: none;
+}
+
+.jp-Notebook.jp-mod-scrollPastEnd::after {
+  display: none;
+}
+
+.jp-InputArea-prompt {
+  display: none;
+}
+
+.jp-Editor {
+  display: none;
+}
+
+.jp-OutputPrompt {
+  display: none;
+}
+
+.jp-Cell {
+  padding: 0;
+}
+
+.jp-cell-menu {
+  display: none;
+}
+
+.lm-TabBar {
+  display: none;
+}
+
+.jp-Toolbar {
+  display: none;
+}
+
+.jp-Collapser {
+  display: none;
+}
+
+.jp-Notebook {
+  padding: 0;
+  z-index: 2;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.jp-MarkdownOutput {
+  display: block;
+  border: none;
+}
+
+#jp-main-vsplit-panel {
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+#jp-main-content-panel {
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+#jp-main-dock-panel {
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+#jp-main-split-panel {
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+body[data-noui-state] .jp-NotebookPanel {
+  top: 0 !important;
+  left: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+#jp-noui-exit-btn {
+  z-index: 2;
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  color: lightgray;
+  background: white;
+  border: none;
+  font-family: system-ui;
+  border: 1px solid transparent;
+}
+
+#jp-noui-exit-btn::after {
+  content: "Exit to JupyterLab"
+}
+
+#jp-noui-exit-btn:hover {
+  color: black;
+}
