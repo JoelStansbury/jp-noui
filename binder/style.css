@@ -12,6 +12,10 @@ Everything else is the same as the default.
   display: none;
 }
 
+#jp-menu-panel {
+  display: none;
+}
+
 .jp-Notebook.jp-mod-scrollPastEnd::after {
   display: none;
 }

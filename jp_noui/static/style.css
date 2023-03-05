@@ -10,6 +10,10 @@ This file is the css that is applied to JupyterLab.
   display: none;
 }
 
+#jp-menu-panel {
+  display: none;
+}
+
 .jp-Notebook.jp-mod-scrollPastEnd::after {
   display: none;
 }
