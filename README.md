@@ -3,7 +3,7 @@
 [![Github Actions Status](https://github.com/JoelStansbury/jp_noui/workflows/Build/badge.svg)](https://github.com/JoelStansbury/jp_noui/actions/workflows/build.yml)
 Hides all jupyter UI elements leaving only cell outputs (notebooks are auto executed).
 
-Try it out on [binder](https://mybinder.org/v2/gh/JoelStansbury/jp_noui/binder)
+Try it out on [binder](https://mybinder.org/v2/gh/JoelStansbury/jp_noui/HEAD)
 
 https://user-images.githubusercontent.com/48299585/222978092-a3763fcf-2672-454a-b755-b8618d0de531.mp4
 
