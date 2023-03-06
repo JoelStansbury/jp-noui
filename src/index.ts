@@ -73,12 +73,12 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
       tracker.currentChanged.disconnect(autoRunAll);
 
       // Force CSS Recalculation
-      document.body.style.zoom = "0.999"
+      document.body.style.zoom = '0.999';
       window.dispatchEvent(new Event('resize'));
-      setTimeout(function(){
-        document.body.style.zoom = "1";
+      setTimeout(() => {
+        document.body.style.zoom = '1';
         window.dispatchEvent(new Event('resize'));
-      },500);
+      }, 500);
     });
 
     if (nbPath.length > 0) {
@@ -96,9 +96,12 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
       };
     } else {
       console.log('noui: No Notebook provided. Exiting to JupyterLab');
-      return {show: () => {return new DisposableDelegate(async () => {});}};
+      return {
+        show: () => {
+          return new DisposableDelegate(() => undefined);
+        }
+      };
     }
-
   }
 };
 
