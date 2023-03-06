@@ -36,9 +36,9 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
     const nbCache = new Set();
 
     function autoRunAll(_: INotebookTracker, nbp: NotebookPanel | null) {
-      if (nbp && !nbCache.has(nbp.title.label)) {
-        nbCache.add(nbp.title.label);
-        console.log(`noui: Running Notebook "${nbp.title.label}"`);
+      if (nbp && !nbCache.has(nbp.context.path)) {
+        nbCache.add(nbp.context.path);
+        console.log(`noui: Running Notebook "${nbp.context.path}"`);
         console.log(nbCache);
 
         body.dataset.nouiState = 'open';
@@ -51,9 +51,10 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
     }
 
     function runOne(_: INotebookTracker, nbp: NotebookPanel | null) {
-      if (nbp && nbPath.endsWith(nbp.title.label) && !nbCache.has(nbp.title.label)) {
-        nbCache.add(nbp.title.label);
-        console.log(`noui: Running Notebook "${nbp.title.label}"`);
+      if (nbp && nbPath.endsWith(nbp.context.path) && !nbCache.has(nbp.context.path)) {
+        nbCache.add(nbp.context.path);
+        console.log(`noui: Running Notebook "${nbp.context.path}"`);
+        console.log(nbp);
         console.log(nbCache);
 
         body.dataset.nouiState = 'open';
@@ -98,7 +99,10 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
       console.log('noui: No Notebook provided. Exiting to JupyterLab');
       return {
         show: () => {
-          return new DisposableDelegate(() => undefined);
+          return new DisposableDelegate(() => {
+            document.getElementById('jp-noui-style')?.remove();
+            body.dataset.nouiState = 'ready';
+          });
         }
       };
     }
