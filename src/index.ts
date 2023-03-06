@@ -39,7 +39,6 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
       if (nbp && !nbCache.has(nbp.context.path)) {
         nbCache.add(nbp.context.path);
         console.log(`noui: Running Notebook "${nbp.context.path}"`);
-        console.log(nbCache);
 
         body.dataset.nouiState = 'open';
         nbp.sessionContext.ready.then(async () => {
@@ -53,9 +52,7 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
     function runOne(_: INotebookTracker, nbp: NotebookPanel | null) {
       if (nbp && nbPath.endsWith(nbp.context.path) && !nbCache.has(nbp.context.path)) {
         nbCache.add(nbp.context.path);
-        console.log(`noui: Running Notebook "${nbp.context.path}"`);
-        console.log(nbp);
-        console.log(nbCache);
+        console.log(`noui: Running Initial Notebook "${nbp.context.path}"`);
 
         body.dataset.nouiState = 'open';
         nbp.sessionContext.ready.then(async () => {
