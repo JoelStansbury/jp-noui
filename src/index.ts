@@ -36,25 +36,24 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
     const nbCache = new Set();
 
     function autoRunAll(_: INotebookTracker, nbp: NotebookPanel | null) {
-      if (nbp && !nbCache.has(nbp.title.label)) {
-        nbCache.add(nbp.title.label);
+      if (nbp && !nbCache.has(nbp.context.path)) {
+        nbCache.add(nbp.context.path);
+        console.log(`noui: Running Notebook "${nbp.context.path}"`);
 
-        console.log(`noui: Running Notebook ${nbp.title.label}"`);
         body.dataset.nouiState = 'open';
         nbp.sessionContext.ready.then(async () => {
           body.dataset.nouiState = 'running';
           await app.commands.execute('notebook:run-all-cells');
           body.dataset.nouiState = 'ready';
-          ready.resolve(void 0);
         });
       }
     }
 
     function runOne(_: INotebookTracker, nbp: NotebookPanel | null) {
-      if (nbp && nbPath.endsWith(nbp.title.label)) {
-        nbCache.add(nbp.title.label);
-        tracker.currentChanged.disconnect(runOne);
-        console.log(`noui: Running Notebook ${nbp.title.label}"`);
+      if (nbp && nbPath.endsWith(nbp.context.path) && !nbCache.has(nbp.context.path)) {
+        nbCache.add(nbp.context.path);
+        console.log(`noui: Running Initial Notebook "${nbp.context.path}"`);
+
         body.dataset.nouiState = 'open';
         nbp.sessionContext.ready.then(async () => {
           body.dataset.nouiState = 'running';
@@ -62,38 +61,48 @@ const splash: JupyterFrontEndPlugin<ISplashScreen> = {
           body.dataset.nouiState = 'ready';
           ready.resolve(void 0);
         });
-        tracker.currentChanged.connect(autoRunAll);
       }
     }
 
     exit_btn.addEventListener('click', e => {
       console.log('noui: Exited noui mode... Deactivating autorun');
-      tracker.currentChanged.disconnect(autoRunAll);
       document.body.removeChild(exit_btn);
       document.getElementById('jp-noui-style')?.remove();
+      tracker.currentChanged.disconnect(autoRunAll);
 
-      // Force Layout Recalculation
-      // document.body.style.scale = '1';
+      // Force CSS Recalculation
+      document.body.style.zoom = '0.999';
       window.dispatchEvent(new Event('resize'));
+      setTimeout(() => {
+        document.body.style.zoom = '1';
+        window.dispatchEvent(new Event('resize'));
+      }, 500);
     });
 
     if (nbPath.length > 0) {
       void app.commands.execute('filebrowser:open-path', { path: nbPath });
       tracker.currentChanged.connect(runOne);
       document.body.appendChild(exit_btn); // Show button to exit
+      return {
+        show: () => {
+          return new DisposableDelegate(async () => {
+            await ready.promise;
+            tracker.currentChanged.disconnect(runOne);
+            tracker.currentChanged.connect(autoRunAll);
+          });
+        }
+      };
     } else {
       console.log('noui: No Notebook provided. Exiting to JupyterLab');
-      body.dataset.nouiState = 'ready';
-      ready.resolve(void 0);
+      return {
+        show: () => {
+          return new DisposableDelegate(() => {
+            document.getElementById('jp-noui-style')?.remove();
+            body.dataset.nouiState = 'ready';
+          });
+        }
+      };
     }
-
-    return {
-      show: () => {
-        return new DisposableDelegate(async () => {
-          await ready.promise;
-        });
-      }
-    };
   }
 };
 

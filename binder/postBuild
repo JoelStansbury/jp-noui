@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
+# instructions for mybinder.org
+
+# 1. Build the extension
 set -eux
 jlpm
 jlpm build:prod
+
+# 2. Install the extension
 python -m pip install -e . -vv --no-build-isolation
+
+# 3. Copy config file into the jupyter config-dir so that it gets loaded by default
+#    Note: the file must be named jupyter_config.json for this to get loaded
 mkdir -p ~/.jupyter
 cp binder/jupyter_config.json ~/.jupyter
+
+# 4. Replace the jupyter-notebook command with jupyter-noui
 cp ${NB_PYTHON_PREFIX}/bin/jupyter-noui ${NB_PYTHON_PREFIX}/bin/jupyter-notebook
