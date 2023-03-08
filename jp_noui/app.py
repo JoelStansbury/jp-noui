@@ -4,10 +4,47 @@ from jupyterlab.labapp import LabApp
 from jupyterlab_server.handlers import LabHandler
 from tornado import web
 
+from ._version import VERSION
+
 # also a ServerApp to use
 STATIC = Path(__file__).parent / "static"
 DEFAULT_STYLE = STATIC / "style.css"
 DEFAULT_LOADER = STATIC / "splash.html"
+
+
+class NoUIApp(LabApp):
+    version = VERSION
+    name = "jp-noui"
+    default_url = "/noui"
+    load_other_extensions = True
+    file_url_prefix = "/render"
+
+    app_name = "JupyterLab"
+    description = """
+    Jupyter NoUI, by default, hides all of the UI elements associated with the jupyter
+    programming environment (i.e. navigation bar, menu bar, execution buttons, etc.).
+
+    - You can override the splash screen and css overrides via config file.
+
+    - You must provide "noui_notebook" via config file in order for noui to be activated.
+
+    Example config file.
+    -------------------
+    {
+        "ServerApp": {
+            "tornado_settings": {
+                "page_config_data": {
+                    "noui_splash_html": "path/to/splash.html",
+                    "noui_style_css": "path/to/style.css",
+                    "noui_notebook": "path/to/main.ipynb"
+                }
+            }
+        }
+    }
+    """
+    examples = """
+    jupyter noui --config=my_config.json [options]
+    """
 
 class NoUIHandler(LabHandler):
     @web.authenticated
@@ -46,5 +83,5 @@ class NoUIHandler(LabHandler):
         self.write(tpl)
 
 LabHandler.get = NoUIHandler.get
-main = LabApp.launch_instance
+main = launch_new_instance = NoUIApp.launch_instance
 
