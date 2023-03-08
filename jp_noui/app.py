@@ -11,15 +11,8 @@ STATIC = Path(__file__).parent / "static"
 DEFAULT_STYLE = STATIC / "style.css"
 DEFAULT_LOADER = STATIC / "splash.html"
 
-
 class NoUIApp(LabApp):
     version = VERSION
-    name = "jp-noui"
-    default_url = "/noui"
-    load_other_extensions = True
-    file_url_prefix = "/render"
-
-    app_name = "JupyterLab"
     description = """
     Jupyter NoUI, by default, hides all of the UI elements associated with the jupyter
     programming environment (i.e. navigation bar, menu bar, execution buttons, etc.).
