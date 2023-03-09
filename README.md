@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/48299585/222978092-a3763fcf-2672-454a-
 To install the extension, execute:
 
 ```bash
-pip install jp_noui
+pip install jp_noui 
 ```
 
 ## Uninstall
